@@ -1,0 +1,39 @@
+# Последняя версия docker-compose
+version: '3'
+# Создаем общую сеть deafult для всех контейнеров
+networks:
+  default:
+    driver: bridge
+
+# Создаем отдельные контейнеры
+services:
+  app:
+    image: richarvey/nginx-php-fpm
+    ports:
+      - 80:80
+    depends_on: 
+      - db
+    volumes:
+      - ./nginx/conf.d/default.nginx:/etc/nginx/conf.d/default.conf
+      - ./nginx/conf.d/default.nginx:/etc/nginx/sites-enabled/default.conf
+      - ./nginx/conf.d/default.nginx:/etc/nginx/sites-avaliable/default.conf
+      - "../app:/var/www/app"
+    networks: 
+      - default
+  db:
+    image: mysql:latest
+    # Подключаем к общей сети с другими контейнерами
+    networks: 
+      - default
+    # Показываем наружу порт
+    ports:
+      - "3336:3306"
+    # Задаем параметры для инициализации БД
+    environment:
+      # Пароль к БД
+      MYSQL_ROOT_PASSWORD: root
+      # Создаваемая по умолчанию бд
+      MYSQL_DATABASE: yii-template-db
+    # Линкуем внешнюю папку для хранения БД
+    volumes:
+      - "./database:/var/lib/mysql"
