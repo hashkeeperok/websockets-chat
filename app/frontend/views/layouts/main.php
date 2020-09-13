@@ -37,7 +37,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Repository', 'url' => ['']],
+        ['label' => 'Repository', 'url' => ['https://github.com/hashkeeperok/websockets-chat']],
     ];
 
     echo Nav::widget([
